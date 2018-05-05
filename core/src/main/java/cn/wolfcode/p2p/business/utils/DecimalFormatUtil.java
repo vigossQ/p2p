@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * 数字格式化工具类
+ * 数字格式化工具类12
  * */
 public class DecimalFormatUtil {
 	// 金额
