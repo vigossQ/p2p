@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.p2p.business.mapper.BidMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.p2p.business.domain.Bid">
+        <id column="id" property="id"/>
+        <result column="actualRate" property="actualRate"/>
+        <result column="availableAmount" property="availableAmount"/>
+        <result column="bidRequestId" property="bidRequestId"/>
+        <result column="bidTime" property="bidTime"/>
+        <result column="bidRequestTitle" property="bidRequestTitle"/>
+        <result column="bidRequestState" property="bidRequestState"/>
+        <association columnPrefix="bu_" javaType="cn.wolfcode.p2p.base.domain.Logininfo" property="bidUser">
+            <id column="id" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+    </resultMap>
+    <insert id="insert" keyProperty="id" parameterType="cn.wolfcode.p2p.business.domain.Bid" useGeneratedKeys="true">
+        INSERT INTO `bid` (actualRate, availableAmount, bidRequestId, bidUser_id, bidTime,
+                           bidRequestTitle, bidRequestState)
+        VALUES (#{actualRate}, #{availableAmount}, #{bidRequestId}, #{bidUser.id}, #{bidTime},
+                #{bidRequestTitle}, #{bidRequestState})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.p2p.business.domain.Bid">
+        UPDATE `bid`
+        SET actualRate      = #{actualRate},
+            availableAmount = #{availableAmount},
+            bidRequestId    = #{bidRequestId},
+            bidUser_id      = #{bidUser.id},
+            bidTime         = #{bidTime},
+            bidRequestTitle = #{bidRequestTitle},
+            bidRequestState = #{bidRequestState}
+        WHERE id = #{id}
+    </update>
+    <update id="updateState">
+        UPDATE bid
+        SET bidRequestState = #{state}
+        WHERE bidRequestId = #{bidRequestId}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+            bid.id,
+            bid.actualRate,
+            bid.availableAmount,
+            bid.bidRequestId,
+            bid.bidTime,
+            bid.bidRequestTitle,
+            bid.bidRequestState,
+            bu.id       bu_id,
+            bu.username bu_username
+        FROM `bid` bid
+            JOIN logininfo bu ON bid.bidUser_id = bu.id
+        WHERE bid.id = #{id}
+    </select>
+    <select id="queryByBidRequestId" resultMap="BaseResultMap">
+        SELECT
+            bid.id,
+            bid.actualRate,
+            bid.availableAmount,
+            bid.bidRequestId,
+            bid.bidTime,
+            bid.bidRequestTitle,
+            bid.bidRequestState,
+            bu.id       bu_id,
+            bu.username bu_username
+        FROM `bid` bid
+            JOIN logininfo bu ON bid.bidUser_id = bu.id
+        WHERE bid.bidRequestId = #{bidRequestId}
+    </select>
+</mapper>

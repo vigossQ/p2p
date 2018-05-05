@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.p2p.business.mapper.PaymentScheduleMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.p2p.business.domain.PaymentSchedule">
+        <id column="id" property="id"/>
+        <result column="deadLine" property="deadLine"/>
+        <result column="payDate" property="payDate"/>
+        <result column="totalAmount" property="totalAmount"/>
+        <result column="principal" property="principal"/>
+        <result column="interest" property="interest"/>
+        <result column="monthIndex" property="monthIndex"/>
+        <result column="state" property="state"/>
+        <result column="bidRequestType" property="bidRequestType"/>
+        <result column="returnType" property="returnType"/>
+        <result column="bidRequestId" property="bidRequestId"/>
+        <result column="borrowUserId" property="borrowUserId"/>
+        <result column="bidRequestTitle" property="bidRequestTitle"/>
+        <collection property="details" ofType="cn.wolfcode.p2p.business.domain.PaymentScheduleDetail" column="id" select="cn.wolfcode.p2p.business.mapper.PaymentScheduleDetailMapper.selectByPaymentScheduleId"/>
+    </resultMap>
+    <insert id="insert" parameterType="cn.wolfcode.p2p.business.domain.PaymentSchedule" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `paymentschedule` (deadLine, payDate, totalAmount, principal, interest, monthIndex,
+                                       state, bidRequestType, returnType, bidRequestId, borrowUserId, bidRequestTitle
+        )
+        VALUES (#{deadLine}, #{payDate}, #{totalAmount}, #{principal}, #{interest}, #{monthIndex},
+                             #{state}, #{bidRequestType}, #{returnType}, #{bidRequestId}, #{borrowUserId}, #{bidRequestTitle}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.p2p.business.domain.PaymentSchedule">
+        UPDATE `paymentschedule`
+        SET deadLine        = #{deadLine},
+            payDate         = #{payDate},
+            totalAmount     = #{totalAmount},
+            principal       = #{principal},
+            interest        = #{interest},
+            monthIndex      = #{monthIndex},
+            state           = #{state},
+            bidRequestType  = #{bidRequestType},
+            returnType      = #{returnType},
+            bidRequestId    = #{bidRequestId},
+            borrowUserId    = #{borrowUserId},
+            bidRequestTitle = #{bidRequestTitle}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+            id,
+            deadLine,
+            payDate,
+            totalAmount,
+            principal,
+            interest,
+            monthIndex,
+            state,
+            bidRequestType,
+            returnType,
+            bidRequestId,
+            borrowUserId,
+            bidRequestTitle
+        FROM `paymentschedule`
+        WHERE id = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+            id,
+            deadLine,
+            payDate,
+            totalAmount,
+            principal,
+            interest,
+            monthIndex,
+            state,
+            bidRequestType,
+            returnType,
+            bidRequestId,
+            borrowUserId,
+            bidRequestTitle
+        FROM `paymentschedule`
+        <include refid="base_where"/>
+    </select>
+    <select id="queryByBidRequestId" resultMap="BaseResultMap">
+        SELECT
+            id,
+            deadLine,
+            payDate,
+            totalAmount,
+            principal,
+            interest,
+            monthIndex,
+            state,
+            bidRequestType,
+            returnType,
+            bidRequestId,
+            borrowUserId,
+            bidRequestTitle
+        FROM `paymentschedule`
+        WHERE bidRequestId = #{bidRequestId}
+    </select>
+    <sql id="base_where">
+        <where>
+            <if test="borrowUserId!=null">
+                and borrowUserId = #{borrowUserId}
+            </if>
+            <if test="bidRequestType!=null">
+                and bidRequestType = #{bidRequestType}
+            </if>
+        </where>
+    </sql>
+</mapper>

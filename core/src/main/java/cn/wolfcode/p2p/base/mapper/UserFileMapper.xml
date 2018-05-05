@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.p2p.base.mapper.UserFileMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.p2p.base.domain.UserFile">
+        <id column="id" property="id"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="auditTime" property="auditTime"/>
+        <result column="applyTime" property="applyTime"/>
+        <result column="score" property="score"/>
+        <result column="image" property="image"/>
+        <association property="applier" javaType="cn.wolfcode.p2p.base.domain.Logininfo" columnPrefix="ap_">
+            <id column="id" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="auditor" javaType="cn.wolfcode.p2p.base.domain.Logininfo" columnPrefix="au_">
+            <id column="id" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="fileType" column="fileType_id" select="cn.wolfcode.p2p.base.mapper.SystemDictionaryItemMapper.selectByPrimaryKey"/>
+    </resultMap>
+    <insert id="insert" parameterType="cn.wolfcode.p2p.base.domain.UserFile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `userfile` (state, remark, auditTime, applyTime, auditor_id, applier_id,
+                                score, image, fileType_id)
+        VALUES (#{state}, #{remark}, #{auditTime}, #{applyTime}, #{auditor.id}, #{applier.id},
+                #{score}, #{image}, #{fileType.id})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.p2p.base.domain.UserFile">
+        UPDATE `userfile`
+        SET state       = #{state},
+            remark      = #{remark},
+            auditTime   = #{auditTime},
+            applyTime   = #{applyTime},
+            auditor_id  = #{auditor.id},
+            applier_id  = #{applier.id},
+            score       = #{score},
+            image       = #{image},
+            fileType_id = #{fileType.id}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+            uf.id,
+            uf.state,
+            uf.remark,
+            uf.auditTime,
+            uf.applyTime,
+            uf.score,
+            uf.image,
+            uf.fileType_id,
+            ap.id       AS ap_id,
+            ap.username AS ap_username,
+            au.id       AS au_id,
+            au.username AS au_username
+        FROM `userfile` uf
+            JOIN logininfo ap ON uf.applier_id = ap.id
+            LEFT JOIN logininfo au ON uf.auditor_id = au.id
+        WHERE uf.id = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+            uf.id,
+            uf.state,
+            uf.remark,
+            uf.auditTime,
+            uf.applyTime,
+            uf.score,
+            uf.image,
+            uf.fileType_id,
+            ap.id       AS ap_id,
+            ap.username AS ap_username,
+            au.id       AS au_id,
+            au.username AS au_username
+        FROM `userfile` uf
+            JOIN logininfo ap ON uf.applier_id = ap.id
+            LEFT JOIN logininfo au ON uf.auditor_id = au.id
+    </select>
+    <select id="queryUnSelectFileTypeList" resultMap="BaseResultMap">
+        SELECT
+            uf.id,
+            uf.state,
+            uf.remark,
+            uf.auditTime,
+            uf.applyTime,
+            uf.score,
+            uf.image,
+            uf.fileType_id,
+            ap.id       AS ap_id,
+            ap.username AS ap_username,
+            au.id       AS au_id,
+            au.username AS au_username
+        FROM `userfile` uf
+            JOIN logininfo ap ON uf.applier_id = ap.id
+            LEFT JOIN logininfo au ON uf.auditor_id = au.id
+        WHERE uf.applier_id = #{logininfoId} AND uf.fileType_id IS NULL
+    </select>
+    <select id="querySelectFileTypeList" resultMap="BaseResultMap">
+        SELECT
+            uf.id,
+            uf.state,
+            uf.remark,
+            uf.auditTime,
+            uf.applyTime,
+            uf.score,
+            uf.image,
+            uf.fileType_id,
+            ap.id       AS ap_id,
+            ap.username AS ap_username,
+            au.id       AS au_id,
+            au.username AS au_username
+        FROM `userfile` uf
+            JOIN logininfo ap ON uf.applier_id = ap.id
+            LEFT JOIN logininfo au ON uf.auditor_id = au.id
+        WHERE uf.applier_id = #{logininfoId} AND uf.fileType_id IS NOT NULL
+    </select>
+    <select id="queryByLogininfoId" resultMap="BaseResultMap">
+        SELECT
+            uf.id,
+            uf.state,
+            uf.remark,
+            uf.auditTime,
+            uf.applyTime,
+            uf.score,
+            uf.image,
+            uf.fileType_id,
+            ap.id       AS ap_id,
+            ap.username AS ap_username,
+            au.id       AS au_id,
+            au.username AS au_username
+        FROM `userfile` uf
+            JOIN logininfo ap ON uf.applier_id = ap.id
+            LEFT JOIN logininfo au ON uf.auditor_id = au.id
+        WHERE uf.applier_id = #{logininfoId} AND uf.state = #{state}
+    </select>
+</mapper>

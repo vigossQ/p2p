@@ -1,0 +1,6 @@
+cn\wolfcode\p2p\base\CoreConfig.class
+cn\wolfcode\p2p\base\service\ILogininfoService.class
+cn\wolfcode\p2p\base\domain\Logininfo.class
+cn\wolfcode\p2p\base\service\impl\LogininfoServiceImpl.class
+cn\wolfcode\p2p\base\mapper\LogininfoMapper.class
+cn\wolfcode\p2p\base\domain\BaseDomain.class

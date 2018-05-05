@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.p2p.business.mapper.RechargeOfflineMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.p2p.business.domain.RechargeOffline">
+        <id column="id" property="id"/>
+        <result column="state" property="state"/>
+        <result column="remark" property="remark"/>
+        <result column="auditTime" property="auditTime"/>
+        <result column="applyTime" property="applyTime"/>
+        <result column="tradeCode" property="tradeCode"/>
+        <result column="tradeTime" property="tradeTime"/>
+        <result column="amount" property="amount"/>
+        <result column="note" property="note"/>
+        <association property="applier" javaType="cn.wolfcode.p2p.base.domain.Logininfo" columnPrefix="ap_">
+            <id column="id" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="auditor" javaType="cn.wolfcode.p2p.base.domain.Logininfo" columnPrefix="au_">
+            <id column="id" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="bankInfo" javaType="cn.wolfcode.p2p.business.domain.PlatformBankinfo" columnPrefix="bank_">
+            <id column="id" property="id"/>
+            <result column="accountName" property="accountName"/>
+            <result column="accountNumber" property="accountNumber"/>
+            <result column="bankForkName" property="bankForkName"/>
+            <result column="bankName" property="bankName"/>
+        </association>
+    </resultMap>
+    <insert id="insert" parameterType="cn.wolfcode.p2p.business.domain.RechargeOffline" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `rechargeoffline` (state, remark, auditTime, applyTime, auditor_id, applier_id,
+                                       tradeCode, tradeTime, amount, note, bankInfo_id)
+        VALUES (#{state}, #{remark}, #{auditTime}, #{applyTime}, #{auditor.id}, #{applier.id},
+                          #{tradeCode}, #{tradeTime}, #{amount}, #{note}, #{bankInfo.id})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.p2p.business.domain.RechargeOffline">
+        UPDATE `rechargeoffline`
+        SET state       = #{state},
+            remark      = #{remark},
+            auditTime   = #{auditTime},
+            applyTime   = #{applyTime},
+            auditor_id  = #{auditor.id},
+            applier_id  = #{applier.id},
+            tradeCode   = #{tradeCode},
+            tradeTime   = #{tradeTime},
+            amount      = #{amount},
+            note        = #{note},
+            bankInfo_id = #{bankInfo.id}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+            ro.id,
+            ro.state,
+            ro.remark,
+            ro.auditTime,
+            ro.applyTime,
+            ro.auditor_id,
+            ro.applier_id,
+            ro.tradeCode,
+            ro.tradeTime,
+            ro.amount,
+            ro.note,
+            ro.bankInfo_id,
+            ap.id              AS ap_id,
+            ap.username        AS ap_username,
+            au.id              AS au_id,
+            au.username        AS au_username,
+            bank.id            AS bank_id,
+            bank.accountName   AS bank_accountName,
+            bank.accountNumber AS bank_accountNumber,
+            bank.bankForkName  AS bank_bankForkName,
+            bank.bankName      AS bank_bankName
+        FROM `rechargeoffline` ro
+            JOIN logininfo ap ON ro.applier_id = ap.id
+            LEFT JOIN logininfo au ON ro.auditor_id = au.id
+            JOIN platformbankinfo bank ON ro.bankInfo_id = bank.id
+        WHERE ro.id = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+            ro.id,
+            ro.state,
+            ro.remark,
+            ro.auditTime,
+            ro.applyTime,
+            ro.auditor_id,
+            ro.applier_id,
+            ro.tradeCode,
+            ro.tradeTime,
+            ro.amount,
+            ro.note,
+            ro.bankInfo_id,
+            ap.id              AS ap_id,
+            ap.username        AS ap_username,
+            au.id              AS au_id,
+            au.username        AS au_username,
+            bank.id            AS bank_id,
+            bank.accountName   AS bank_accountName,
+            bank.accountNumber AS bank_accountNumber,
+            bank.bankForkName  AS bank_bankForkName,
+            bank.bankName      AS bank_bankName
+        FROM `rechargeoffline` ro
+            JOIN logininfo ap ON ro.applier_id = ap.id
+            LEFT JOIN logininfo au ON ro.auditor_id = au.id
+            JOIN platformbankinfo bank ON ro.bankInfo_id = bank.id
+    </select>
+</mapper>

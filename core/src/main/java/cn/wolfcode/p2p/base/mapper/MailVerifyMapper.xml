@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.p2p.base.mapper.MailVerifyMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.p2p.base.domain.MailVerify">
+        <id column="id" property="id"/>
+        <result column="userid" property="userid"/>
+        <result column="sendTime" property="sendTime"/>
+        <result column="email" property="email"/>
+        <result column="uuid" property="uuid"/>
+    </resultMap>
+    <insert id="insert" parameterType="cn.wolfcode.p2p.base.domain.MailVerify" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `mailverify` (userid, sendTime, email, uuid)
+        VALUES (#{userid}, #{sendTime}, #{email}, #{uuid})
+    </insert>
+    <select id="selectByKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            userid,
+            sendTime,
+            email,
+            uuid
+        FROM `mailverify`
+        WHERE uuid = #{uuid}
+    </select>
+</mapper>

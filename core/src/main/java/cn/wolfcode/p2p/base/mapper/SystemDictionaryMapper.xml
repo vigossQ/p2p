@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.p2p.base.mapper.SystemDictionaryMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.p2p.base.domain.SystemDictionary">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="title" property="title"/>
+    </resultMap>
+    <insert id="insert" parameterType="cn.wolfcode.p2p.base.domain.SystemDictionary" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `systemdictionary` (sn, title)
+        VALUES (#{sn}, #{title})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.p2p.base.domain.SystemDictionary">
+        UPDATE `systemdictionary`
+        SET sn    = #{sn},
+            title = #{title}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+            id,
+            sn,
+            title
+        FROM `systemdictionary`
+        WHERE id = #{id}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+            id,
+            sn,
+            title
+        FROM `systemdictionary`
+    </select>
+</mapper>

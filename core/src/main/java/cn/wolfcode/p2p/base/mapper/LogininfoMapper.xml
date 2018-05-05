@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.p2p.base.mapper.LogininfoMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.p2p.base.domain.Logininfo">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="state" property="state"/>
+        <result column="userType" property="userType"/>
+    </resultMap>
+    <insert id="insert" parameterType="cn.wolfcode.p2p.base.domain.Logininfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `logininfo` (username, password, state, userType
+        )
+        VALUES (#{username}, #{password}, #{state}, #{userType}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.p2p.base.domain.Logininfo">
+        UPDATE `logininfo`
+        SET username = #{username},
+            password = #{password},
+            state    = #{state},
+            userType = #{userType}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+            id,
+            username,
+            password,
+            state,
+            userType
+        FROM `logininfo`
+        WHERE id = #{id}
+    </select>
+    <select id="selectByUsername" resultType="java.lang.Integer">
+        SELECT count(id)
+        FROM logininfo
+        WHERE username = #{username}
+    </select>
+    <select id="login" resultType="cn.wolfcode.p2p.base.domain.Logininfo">
+        SELECT
+            id,
+            username,
+            password,
+            state,
+            userType
+        FROM logininfo
+        WHERE username = #{username} AND password = #{password} AND userType = #{userType}
+    </select>
+    <select id="selectByUserTpye" resultType="java.lang.Integer">
+        SELECT count(id)
+        FROM logininfo
+        WHERE userType = #{userType}
+    </select>
+    <select id="queryAutoComplate" resultMap="BaseResultMap">
+        SELECT
+            li.id,
+            li.username
+        FROM logininfo li
+            JOIN userinfo ui ON li.id = ui.id
+        WHERE li.username LIKE concat('%', #{keyword}, '%')
+              OR ui.realName LIKE concat('%', #{keyword}, '%')
+    </select>
+</mapper>

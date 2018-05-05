@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.p2p.business.mapper.PlatformBankinfoMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.p2p.business.domain.PlatformBankinfo">
+        <id column="id" property="id"/>
+        <result column="bankName" property="bankName"/>
+        <result column="accountName" property="accountName"/>
+        <result column="accountNumber" property="accountNumber"/>
+        <result column="bankForkName" property="bankForkName"/>
+    </resultMap>
+    <insert id="insert" parameterType="cn.wolfcode.p2p.business.domain.PlatformBankinfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `platformbankinfo` (bankName, accountName, accountNumber, bankForkName)
+        VALUES (#{bankName}, #{accountName}, #{accountNumber}, #{bankForkName})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.wolfcode.p2p.business.domain.PlatformBankinfo">
+        UPDATE `platformbankinfo`
+        SET bankName      = #{bankName},
+            accountName   = #{accountName},
+            accountNumber = #{accountNumber},
+            bankForkName  = #{bankForkName}
+        WHERE id = #{id}
+    </update>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+            id,
+            bankName,
+            accountName,
+            accountNumber,
+            bankForkName
+        FROM `platformbankinfo`
+    </select>
+</mapper>
